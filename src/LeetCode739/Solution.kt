@@ -17,9 +17,6 @@ fun dailyTemperatures(temperatures: IntArray): IntArray {
     temperatures.forEachIndexed { idx, value ->
         mat[value].add(idx)
     }
-    mat.forEach {
-        it.sort()
-    }
 
     val answer = IntArray(temperatures.size).apply {
         fill(Int.MAX_VALUE)
@@ -40,7 +37,10 @@ fun dailyTemperatures(temperatures: IntArray): IntArray {
             }
 
             if (start <= mat[temp].lastIndex && mat[temp][start] > idx)
-                answer[idx] = min(answer[idx], mat[temp][start] - idx)
+                answer[idx] = if (answer[idx] > mat[temp][start] - idx)
+                    mat[temp][start] - idx
+                else
+                    answer[idx]
         }
     }
     return answer.map {
