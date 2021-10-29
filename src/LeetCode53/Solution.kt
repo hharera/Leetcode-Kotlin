@@ -1,10 +1,13 @@
 package LeetCode53
 
+import java.lang.Integer.MIN_VALUE
+import java.lang.Integer.max
+
 fun main() {
     println(
         maxSubArray(
             arrayOf(
-               -2,-1
+                -2, 1, -3, 4, -1, 2, 1, -5, 4
             ).toIntArray()
         )
     )
@@ -12,28 +15,23 @@ fun main() {
 
 
 fun maxSubArray(nums: IntArray): Int {
-    val comulative = IntArray(nums.size + 1)
+    val comulative = IntArray(nums.size)
+    comulative.set(0, nums.get(0))
+    var ans = nums.get(0)
 
-    var max = Int.MIN_VALUE
-    var maxIdx = Int.MIN_VALUE
+    for (index in 1..nums.lastIndex) {
+        comulative[index] =
+            nums.get(index) +
+                    if (comulative[index - 1] <= 0)
+                        0
+                    else
+                        comulative[index - 1]
 
-    nums.forEachIndexed { index, i ->
-        comulative[index + 1] = comulative[index] + nums[index]
-        if (comulative[index + 1] > max) {
-            max = comulative[index + 1]
-            maxIdx = index + 1
-
-        }
+        ans = if (comulative.get(index) > ans)
+            comulative.get(index)
+        else
+            ans
     }
 
-    var ans = Int.MIN_VALUE
-    var sum = 0
-    for (i in maxIdx - 1 downTo 0) {
-        sum += nums[i]
-
-        if (sum > ans) {
-            ans = sum
-        }
-    }
     return ans
 }
