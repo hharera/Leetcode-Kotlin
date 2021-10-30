@@ -1,47 +1,45 @@
 package LeetCode918
 
-import kotlin.math.max
-
 fun maxSubarraySumCircular(nums: IntArray): Int {
-    val arrayList = ArrayList<Pair<Int, Int>>()
+    var max_global = Int.MIN_VALUE
+    var max_local = 0
 
-    val accumelatedSum = IntArray(nums.size + 1)
-    accumelatedSum[0] = 0
-    for (idx in 1 until accumelatedSum.size) {
-        accumelatedSum[idx] = accumelatedSum[idx - 1] + nums[idx - 1]
+    nums.forEach {
+        max_local += it
+        if (max_local > max_global)
+            max_global = max_local
+
+        if (max_local < 0)
+            max_local = 0
     }
 
-    for (idx1 in nums.indices) {
-        for (idx2 in idx1 until idx1 + nums.size) {
-            arrayList.add(Pair(idx1 + 1, idx2 + 1 % nums.size))
-        }
+    var minGlobal = Int.MAX_VALUE
+    var minLocal = 0
+    var sum = 0
+    nums.forEach {
+        minLocal += it
+        sum += it
+        if (minGlobal > minLocal)
+            minGlobal = minLocal
+
+        if (minLocal > 0)
+            minLocal = 0
     }
 
-    var ans = 0
-    arrayList.forEach {
-        if (it.first <= it.second)
-            ans = max(
-                accumelatedSum[it.second % nums.size] - accumelatedSum[it.first % nums.size - 1],
-                ans
-            )
-        else {
-            ans = max(
-                accumelatedSum[accumelatedSum.lastIndex] - accumelatedSum[it.first % nums.size - 1]
-                        +
-                        accumelatedSum[it.second % nums.size],
-                ans
-            )
-        }
-    }
+     if(minGlobal == sum)
+         return max_global
 
-    return ans
+    return if(max_global > sum - minGlobal)
+        max_global
+    else
+        sum - minGlobal
 }
 
 fun main() {
     println(
         maxSubarraySumCircular(
             arrayOf<Int>(
-                5, -3, 5
+                1, -2, 3, -2
             ).toIntArray()
         )
     )
