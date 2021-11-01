@@ -1,46 +1,47 @@
 package LeetCode939
 
-fun main() {
+import kotlin.math.abs
+import kotlin.math.max
 
+fun main() {
+    println(
+        minAreaRect(
+            arrayOf(
+                arrayOf(3, 3).toIntArray(),
+                arrayOf(3, 1).toIntArray(),
+                arrayOf(4, 3).toIntArray(),
+                arrayOf(4, 1).toIntArray(),
+            )
+        )
+    )
 }
 
 fun minAreaRect(points: Array<IntArray>): Int {
-    val lines = HashMap<Pair<Int, Int>, Int>()
-    for (i in points.indices) {
-        for (j in points.indices) {
-            if (i == j)
-                continue
+    val lines = HashMap<Int, HashSet<Int>>()
 
-            if (points[j][1] - points[i][1] != 0)
-                continue
-
-            if (points[j][0] < points[i][0])
-                lines.put(
-                    Pair(points[j][0], points[i][0]),
-                    lines.getOrDefault(Pair(points[j][0], points[i][0]), -1) + 1
-                )
-            else
-                lines.put(
-                    Pair(points[i][0], points[j][0]),
-                    lines.getOrDefault(Pair(points[i][0], points[j][0]), -1) + 1
-                )
+    for (point in points) {
+        if (lines.containsKey(point[1]))
+            lines.get(point[1])!!.add(point[0])
+        else {
+            lines.set(point[1], HashSet())
+            lines.get(point[1])!!.add(point[0])
         }
     }
 
     var ans = 0
-    lines.values.forEach {
-        ans += ncr(it, 2)
+    for (point in points) {
+        for (_point in points) {
+            if (point[1] == _point[1] && point[0] == _point[0])
+                continue
+
+            if (lines.get(point[1])!!.contains(_point[0]) && lines.get(_point[1])!!.contains(point[0])) {
+                ans = max(
+                    ans,
+                    abs(point[0] - _point[0]) * abs(point[1] - _point[1])
+                )
+            }
+        }
     }
+
     return ans
-}
-
-fun ncr(n: Int, r: Int): Int {
-    return fact(n) / (fact(r) *
-            fact(n - r))
-}
-
-fun fact(n: Int): Int {
-    var res = 1
-    for (i in 2..n) res = res * i
-    return res
 }
