@@ -1,4 +1,4 @@
-package LeetCode.RemoveDuplicatesfromSortedArray;
+package LeetCode26;
 
 import java.util.HashMap;
 import java.util.Map;

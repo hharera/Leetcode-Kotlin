@@ -1,4 +1,4 @@
-package LeetCode.RotateImage;
+package LeetCode48;
 
 class Solution {
 
