@@ -7,9 +7,9 @@ import java.lang.Math.pow
 fun main() {
     kClosest(
         arrayOf(
-            arrayOf(3,3).toIntArray(),
-            arrayOf(5,-1).toIntArray(),
-            arrayOf(-2,4).toIntArray(),
+            arrayOf(3, 3).toIntArray(),
+            arrayOf(5, -1).toIntArray(),
+            arrayOf(-2, 4).toIntArray(),
         ),
         2
     ).forEach {
@@ -44,8 +44,8 @@ class Point(
 
 fun getDisitance(i: Int, i1: Int, i2: Int, i3: Int): Double {
     return Math.sqrt(
-        pow((i - i2).toDouble(), 2.toDouble())
+        (i - i2).toDouble() * (i - i2).toDouble()
                 +
-                pow((i1 - i3).toDouble(), 2.toDouble())
+                (i1 - i3).toDouble() * (i1 - i3).toDouble()
     )
 }

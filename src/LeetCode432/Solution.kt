@@ -10,6 +10,8 @@ fun main() {
         inc("leet")
         inc("hello")
         inc("hello")
+        dec("hello")
+        dec("hello")
         println(getMaxKey())
         println(getMinKey())
     }
@@ -21,22 +23,16 @@ data class Key(
     val count: Int
 )
 
-class AllOne() {
-    private var minQueue = PriorityQueue<Key>(
-        object : Comparator<Key> {
-            override fun compare(o1: Key, o2: Key): Int {
-                return o1.count - o2.count
-            }
-        }
-    )
+data class Node(
+    val key: String,
+    var value: Int,
+    var next: Node? = null,
+    var prev: Node? = null,
+)
 
-    private var maxQueue = PriorityQueue<Key>(
-        object : Comparator<Key> {
-            override fun compare(o1: Key, o2: Key): Int {
-                return o2.count - o1.count
-            }
-        }
-    )
+class AllOne() {
+    private var max : Node? = null
+    private var min : Node? = null
 
     private val keys = HashMap<String, Int>()
     fun inc(key: String) {
@@ -60,32 +56,37 @@ class AllOne() {
         }
     }
 
-    private fun updateMinMax(key: String, count: Int) {
-        if (count == 0) {
-            if (maxQueue.peek().key == key) {
-                maxQueue.poll()
-            }
-            if (minQueue.peek().key == key) {
-                minQueue.poll()
-            }
-            return
-        }
-
-        maxQueue.add(Key(key, count))
-        minQueue.add(Key(key, count))
-    }
-
     fun getMaxKey(): String {
-        if (maxQueue.isEmpty())
+        if (max == null)
             return ""
 
-        return maxQueue.peek().key
+        return max!!.key
     }
 
     fun getMinKey(): String {
-        if (minQueue.isEmpty())
+        if (min == null)
             return ""
 
-        return minQueue.peek().key
+        return min!!.key
+    }
+
+    private fun updateMinMax(key: String, count: Int) {
+        if (max == null && min == null) {
+            max = Node(key = key, value = count)
+            min = Node(key = key, value = count)
+            return
+        }
+
+        if (max!!.value <= count) {
+            max!!.next = Node(key = key, value = count)
+            max!!.next!!.prev = max
+            max = max!!.next!!
+        }
+
+        if (min!!.value >= count) {
+            min!!.next = Node(key = key, value = count)
+            min!!.next!!.prev = min
+            min = min!!.next!!
+        }
     }
 }
