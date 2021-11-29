@@ -1,17 +1,15 @@
 package LeetCode432
 
-import java.util.*
-import kotlin.Comparator
 import kotlin.collections.HashMap
 
 
 fun main() {
     AllOne().apply {
+        inc("hello")
+        inc("hello")
+        println(getMaxKey())
+        println(getMinKey())
         inc("leet")
-        inc("hello")
-        inc("hello")
-        dec("hello")
-        dec("hello")
         println(getMaxKey())
         println(getMinKey())
     }
@@ -23,70 +21,58 @@ data class Key(
     val count: Int
 )
 
-data class Node(
-    val key: String,
-    var value: Int,
-    var next: Node? = null,
-    var prev: Node? = null,
-)
-
 class AllOne() {
-    private var max : Node? = null
-    private var min : Node? = null
-
     private val keys = HashMap<String, Int>()
+
     fun inc(key: String) {
         if (keys[key] != null) {
             keys[key] = keys[key]!! + 1
-            updateMinMax(key, keys[key]!!)
         } else {
             keys.put(key, 1)
-            updateMinMax(key, 1)
         }
     }
 
     fun dec(key: String) {
         if (keys[key]!! == 1) {
             keys.remove(key)
-            updateMinMax(key, 0)
         } else {
             keys[key] = keys[key]!! - 1
-
-            updateMinMax(key, keys[key]!!)
         }
     }
 
     fun getMaxKey(): String {
-        if (max == null)
+        if (keys.isEmpty())
             return ""
 
-        return max!!.key
+        var max = Int.MIN_VALUE
+        var key = ""
+
+        keys.forEach {
+            max = if (max < it.value) {
+                key = it.key
+                it.value
+            }
+            else
+                max
+        }
+        return key
     }
 
     fun getMinKey(): String {
-        if (min == null)
+        if (keys.isEmpty())
             return ""
 
-        return min!!.key
-    }
+        var min = Int.MAX_VALUE
+        var key = ""
 
-    private fun updateMinMax(key: String, count: Int) {
-        if (max == null && min == null) {
-            max = Node(key = key, value = count)
-            min = Node(key = key, value = count)
-            return
+        keys.forEach {
+            min = if (min > it.value) {
+                key = it.key
+                it.value
+            }
+            else
+                min
         }
-
-        if (max!!.value <= count) {
-            max!!.next = Node(key = key, value = count)
-            max!!.next!!.prev = max
-            max = max!!.next!!
-        }
-
-        if (min!!.value >= count) {
-            min!!.next = Node(key = key, value = count)
-            min!!.next!!.prev = min
-            min = min!!.next!!
-        }
+        return key
     }
 }
