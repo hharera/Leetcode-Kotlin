@@ -58,7 +58,7 @@ fun diameterOfBinaryTree(root: TreeNode?): Int {
 
 fun getLongestDiameter(root: TreeNode?): Int {
     if (root == null)
-        return -1
+        return 0
 
     var max = 0
 
