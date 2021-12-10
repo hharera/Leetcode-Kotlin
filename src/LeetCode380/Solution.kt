@@ -35,7 +35,5 @@ class RandomizedSet() {
         }
 
     fun getRandom(): Int =
-        set.toIntArray()[idx % set.size].also {
-            idx = (idx + 3) % set.size
-        }
+        set.random()
 }
