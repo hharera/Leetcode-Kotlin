@@ -1,6 +1,6 @@
-package com.harera.leetcode.LeetCode15
+package com.harera.leetcode
 
-class LeetCode15{
+class Solution{
     fun main() {
         println(
             threeSum(

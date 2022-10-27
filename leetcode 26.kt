@@ -1,4 +1,7 @@
-internal class Solution {
+package com.harera.leetcode
+
+
+class Solution {
     fun removeDuplicates(nums: IntArray): Int {
         var nums = nums
         val map: MutableMap<Int?, Int?> = HashMap()
@@ -18,10 +21,8 @@ internal class Solution {
         return ans
     }
 
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            println(Solution().removeDuplicates(intArrayOf(1, 1, 2)))
-        }
-    }
+}
+
+fun main(args: Array<String>) {
+    println(Solution().removeDuplicates(intArrayOf(1, 1, 2)))
 }

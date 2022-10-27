@@ -1,6 +1,6 @@
 package leetcode213
 
-//class Solution {
+//class com.harera.leetcode.LeetCode15.LeetCode58.com.harera.leetcode.com.harera.leetcode.src.main.kotlin.Solution {
 //    fun rob(nums: IntArray): Int {
 //        val houses = nums.mapIndexed { index, amount ->
 //            House(amount, index)

@@ -1,3 +1,5 @@
+package com.harera.leetcode
+
 fun lengthOfLastWord(s: String): Int {
     var result = arrayListOf<String>()
 
