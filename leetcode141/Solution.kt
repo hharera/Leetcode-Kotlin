@@ -1,37 +1,12 @@
-package LeetCode141
+package com.harera.leetcode.leetcode141
 
-class LeetCode141 {
-    class ListNode {
-        var `val` = 0
-        var next: ListNode? = null
 
-        constructor() {}
-        constructor(`val`: Int) {
-            this.`val` = `val`
-        }
+class ListNode(var `val`: Int) {
+    var next: ListNode? = null
+}
 
-        constructor(`val`: Int, next: ListNode?) {
-            this.`val` = `val`
-            this.next = next
-        }
-    }
+class Solution {
 
-    fun main() {
-        val root = ListNode(1)
-        println(
-            hasCycle(
-                ListNode(4).apply {
-                    next = root.apply {
-                        next = ListNode(3).apply {
-                            next = ListNode(2).apply {
-                                next = root
-                            }
-                        }
-                    }
-                }
-            )
-        )
-    }
 
     fun hasCycle(head: ListNode?): Boolean {
         if (head == null)
@@ -54,4 +29,24 @@ class LeetCode141 {
 
         return false
     }
+}
+
+
+fun main() {
+    val root = ListNode(1)
+    println(
+        Solution().hasCycle(
+            root.apply {
+                next = ListNode(4).apply {
+                    next = ListNode(5).apply {
+                        next = ListNode(3).apply {
+                            next = ListNode(2).apply {
+                                next = root
+                            }
+                        }
+                    }
+                }
+            }
+        )
+    )
 }

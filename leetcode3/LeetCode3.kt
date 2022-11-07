@@ -1,5 +1,6 @@
 package com.harera.leetcode.leetcode3
 
+
 class Solution {
     fun lengthOfLongestSubstring(s: String): Int {
         var longest = 0
