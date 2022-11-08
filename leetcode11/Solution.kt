@@ -1,16 +1,6 @@
 package com.harera.leetcode.leetcode11
 
 class Solution{
-    fun main() {
-        println(
-            threeSum(
-                arrayOf(
-                    3, -2, 0, 9, -10, 6, -5, -3, -5, -3, 9, -3, 4, 4, -6, -1, 8, 9, -2, -6, 5, -8, 6
-                ).toIntArray()
-            ).toString()
-        )
-    }
-
     fun threeSum(nums: IntArray): List<List<Int>> {
         nums.sort()
 
@@ -47,4 +37,14 @@ class Solution{
 
         return ans
     }
+}
+
+fun main() {
+    println(
+        Solution().threeSum(
+            arrayOf(
+                -1, 0, 1, 2, -1, -4
+            ).toIntArray()
+        ).toString()
+    )
 }
