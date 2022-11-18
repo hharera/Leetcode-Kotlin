@@ -1,4 +1,5 @@
-package LeetCode242
+package com.harera.leetcode.leetcode242
+
 
 internal class Solution {
     fun isAnagram(s: String, t: String): Boolean {
