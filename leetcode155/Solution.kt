@@ -1,4 +1,4 @@
-package LeetCode155
+package com.harera.leetcode.leetcode155
 
 class MinStack() {
     var head: Node? = null
