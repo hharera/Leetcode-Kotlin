@@ -1,49 +1,48 @@
 package com.harera.leetcode.leetcode101
 
+
 class TreeNode(var `val`: Int) {
     var left: TreeNode? = null
     var right: TreeNode? = null
 }
 
-
 class Solution {
 
-    private val levels = mutableListOf<MutableList<Int>>()
+    fun isSymmetric(root: TreeNode?): Boolean {
+        if (root == null)
+            return true
 
-    fun zigzagLevelOrder(root: TreeNode?): List<List<Int>> {
-        levels.add(ArrayList())
-        traverse(root, 1)
-        levels.forEachIndexed { index, mutableList ->
-            if (index % 2 == 0)
-                mutableList.reverse()
-        }
-        return levels.drop(1)
+       return search(root.left, root.right)
     }
 
-    private fun traverse(root: TreeNode?, level: Int) {
-        if (root == null)
-            return
-
-        if (levels.lastIndex < level) {
-            levels.add(arrayListOf(root.`val`))
-        } else {
-            levels[level].add(root.`val`)
+    private fun search(left: TreeNode?, right: TreeNode?): Boolean {
+        if (left == null && right == null)
+            return true
+        var leftVal: Int? = null
+        if (left != null) {
+            leftVal = left.`val`
         }
-        traverse(root.left, level + 1)
-        traverse(root.right, level + 1)
+        var rightVal: Int? = null
+        if (right != null) {
+            rightVal = right.`val`
+        }
+        return (leftVal == rightVal) && search(left?.right, right?.left) &&
+                search(left?.left, right?.right)
     }
 }
 
 fun main() {
-    //[3,9,20,null,null,15,7]
     val solution = Solution()
     println(
-        solution.zigzagLevelOrder(
-            TreeNode(3).apply {
-                left = TreeNode(9)
-                right = TreeNode(20).apply {
-                    left = TreeNode(15)
-                    right = TreeNode(7)
+        solution.isSymmetric(
+            TreeNode(1).apply {
+                left = TreeNode(2).apply {
+                    left = TreeNode(3)
+                    right = TreeNode(4)
+                }
+                right = TreeNode(2).apply {
+                    left = TreeNode(4)
+                    right = TreeNode(3)
                 }
             }
         )
