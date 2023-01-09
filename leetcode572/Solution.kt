@@ -18,42 +18,46 @@ fun main() {
     ))
 }
 
-fun isSubtree(root: TreeNode?, subRoot: TreeNode?): Boolean {
-    return searchInTree(root, subRoot)
-}
 
-fun searchInSubTree(root: TreeNode?, subRoot: TreeNode?): Boolean {
-    if (root == null && subRoot == null)
-        return true
+class Solution {
 
-    if (root == null && subRoot != null)
-        return false
+    fun isSubtree(root: TreeNode?, subRoot: TreeNode?): Boolean {
+        return searchInSubTree(root, subRoot)
+    }
 
-    if (subRoot == null && root != null)
-        return false
+    fun searchInSubTree(root: TreeNode?, subRoot: TreeNode?): Boolean {
+        if (root == null && subRoot == null)
+            return true
 
-    if (root!!.`val` != subRoot!!.`val`)
-        return false
+        if (root == null && subRoot != null)
+            return false
 
-    return true.and(
-        searchInSubTree(root.right, subRoot.right)
-    ).and(
-        searchInSubTree(root.left, subRoot.left)
-    )
-}
+        if (subRoot == null && root != null)
+            return false
 
-fun searchInTree(root: TreeNode?, subRoot: TreeNode?): Boolean {
-    if (root == null)
-        return false
+        if (root!!.`val` != subRoot!!.`val`)
+            return false
 
-    if (searchInSubTree(root, subRoot))
-        return true
+        return true.and(
+            searchInSubTree(root.right, subRoot.right)
+        ).and(
+            searchInSubTree(root.left, subRoot.left)
+        )
+    }
 
-    return false.or(
-        searchInTree(root.left, subRoot)
-    ).or(
-        searchInTree(root.right, subRoot)
-    )
+    fun searchInTree(root: TreeNode?, subRoot: TreeNode?): Boolean {
+        if (root == null)
+            return false
+
+        if (searchInSubTree(root, subRoot))
+            return true
+
+        return false.or(
+            searchInTree(root.left, subRoot)
+        ).or(
+            searchInTree(root.right, subRoot)
+        )
+    }
 }
 
 
