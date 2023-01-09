@@ -1,28 +1,14 @@
-package LeetCode572
+package com.harera.leetcode.leetcode572
 
-fun main() {
-    println(searchInTree(
-        root = TreeNode(3).apply {
-            left = TreeNode(4).apply {
-                left = TreeNode(1)
-                right = TreeNode(2).apply {
-                    left = TreeNode(0)
-                }
-            }
-            right = TreeNode(5)
-        },
-        subRoot = TreeNode(4).apply {
-            left = TreeNode(2)
-            right = TreeNode(1)
-        }
-    ))
+class TreeNode(var `val`: Int) {
+    var left: TreeNode? = null
+    var right: TreeNode? = null
 }
-
 
 class Solution {
 
     fun isSubtree(root: TreeNode?, subRoot: TreeNode?): Boolean {
-        return searchInSubTree(root, subRoot)
+        return searchInTree(root, subRoot)
     }
 
     fun searchInSubTree(root: TreeNode?, subRoot: TreeNode?): Boolean {
@@ -49,10 +35,7 @@ class Solution {
         if (root == null)
             return false
 
-        if (searchInSubTree(root, subRoot))
-            return true
-
-        return false.or(
+        return searchInSubTree(root, subRoot).or(
             searchInTree(root.left, subRoot)
         ).or(
             searchInTree(root.right, subRoot)
@@ -60,8 +43,21 @@ class Solution {
     }
 }
 
-
-class TreeNode(var `val`: Int) {
-    var left: TreeNode? = null
-    var right: TreeNode? = null
+fun main() {
+    val solution = Solution()
+    solution.isSubtree(
+        TreeNode(3).apply {
+            left = TreeNode(4).apply {
+                left = TreeNode(1)
+                right = TreeNode(2)
+            }
+            right = TreeNode(5)
+        },
+        TreeNode(4).apply {
+            left = TreeNode(1)
+            right = TreeNode(2)
+        }
+    ).let {
+        println(it)
+    }
 }
