@@ -26,3 +26,11 @@ class Vector2D(vec2d: List<List<Int?>?>?) : MutableIterator<Int?> {
 
     override fun remove() {}
 }
+
+
+fun main() {
+    val vec2d = Vector2D(listOf(listOf(1, 2), listOf(3), listOf(4, 5, 6)))
+    while (vec2d.hasNext()) {
+        println(vec2d.next())
+    }
+}
