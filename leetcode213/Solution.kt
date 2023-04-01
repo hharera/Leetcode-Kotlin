@@ -1,61 +1,51 @@
-package leetcode213
-
-//class com.harera.leetcode.LeetCode15.LeetCode58.com.harera.leetcode.com.harera.leetcode.src.com.harera.leetcode.leetcode124_V2.main.kotlin.Solution {
-//    fun rob(nums: IntArray): Int {
-//        val houses = nums.mapIndexed { index, amount ->
-//            House(amount, index)
-//        }.sortedByDescending {
-//            it.amount
-//        }
-//
-//        val robbedHouses = HashSet<Int>()
-//        var result = 0
-//
-//        houses.forEach {
-//            if (
-//                robbedHouses.contains((it.index + 1 + houses.size ) % houses.size) ||
-//                robbedHouses.contains((it.index - 1 + houses.size ) % houses.size)
-//            ) {
-//
-//            } else {
-//                result += it.amount
-//                robbedHouses.add(it.index)
-//            }
-//        }
-//
-//        return result
-//    }
-//
-//    class House(
-//        val amount : Int,
-//        val index : Int
-//    )
-//}
+package com.harera.leetcode.leetcode213
 
 class Solution {
 
+    private var dp = Array(105) { -1 }
+
     fun rob(nums: IntArray): Int {
-        return arrayOf(
-            nums[0],
-            solve(nums.dropLast(1)),
-            solve(nums.drop(1))
-        ).sortedArrayDescending().first()
+        if (nums.size < 3)
+            return nums.max()!!
+
+        val solution1 = nums.asList().subList(1, nums.size).let {
+            solve(0, it.toIntArray())
+        }
+        dp = Array(105) { -1 }
+        val solution2 = nums.asList().subList(0, nums.lastIndex).let {
+            solve(0, it.toIntArray())
+        }
+        return maxOf(
+            solution1,
+            solution2
+        )
     }
 
-    fun solve(nums: List<Int>): Int {
-        var rob1 = 0
-        var rob2 = 0
-
-        for (index: Int in 0..nums.lastIndex) {
-            val temp = if (rob1 + nums[index] > rob2) {
-                rob1 + nums[index]
-            } else {
-                rob2
-            }
-            rob1 = rob2
-            rob2 = temp
+    private fun solve(idx: Int, nums: IntArray): Int {
+        if (idx > nums.lastIndex) {
+            return 0
         }
 
-        return rob2
+        if (dp[idx] != -1)
+            return dp[idx]
+
+        val answer = maxOf(
+            nums[idx] + solve(idx + 2, nums),
+            solve(idx + 1, nums)
+        )
+
+        return answer.also {
+            dp[idx] = answer
+        }
     }
+}
+
+fun main() {
+    println(
+        Solution().rob(
+            intArrayOf(
+                1, 2, 1, 1
+            )
+        )
+    )
 }
