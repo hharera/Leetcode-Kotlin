@@ -1,4 +1,4 @@
-package LeetCode173
+package com.harera.leetcode.leetcode173
 
 import java.util.*
 
@@ -8,19 +8,17 @@ class TreeNode(var `val`: Int) {
 }
 
 class BSTIterator(root: TreeNode?) {
-    val queue = LinkedList<TreeNode>()
+    lateinit var queue: LinkedList<TreeNode>
 
     init {
-        getNodes(root)
+        queue = getNodes(root).toCollection(LinkedList())
     }
 
-    private fun getNodes(root: TreeNode?) {
+    private fun getNodes(root: TreeNode?): List<TreeNode> {
         if (root == null)
-            return
+            return emptyList()
 
-        getNodes(root.left)
-        queue.add(root)
-        getNodes(root.right)
+        return getNodes(root.left).plus(root).plus(getNodes(root.right))
     }
 
     fun next(): Int {
