@@ -3,58 +3,19 @@ package com.harera.leetcode.leetcode424
 
 class Solution {
     fun characterReplacement(s: String, k: Int): Int {
-        var globalLongest = 0
-        var globalChar = s[0]
+        val freq = IntArray(26) { 0 }
         var longest = 1
-        var char = s[0]
-        for (idx in 1..s.lastIndex) {
-            if (char == s.get(idx)) {
-                longest++
-            } else {
-                if (longest > globalLongest) {
-                    globalLongest = longest
-                    globalChar = char
-                }
-                char = s[idx]
-                longest = 1
-            }
-        }
-        if (longest > globalLongest) {
-            globalLongest = longest
-            globalChar = char
-        }
-        var subString = ""
-        for (idx in 1..globalLongest) {
-            subString = subString.plus(globalChar)
-        }
-        val sourceIdxOfSubString = s.indexOf(subString)
-        val destinationIdxOfSubString = sourceIdxOfSubString + globalLongest - 1
+        var end = 0
+        for (start in 0..s.lastIndex) {
+            freq[s[start] - 'A']++
+            longest = maxOf(longest, freq[s[start] - 'A'])
 
-        var counter = k
-        for (idx in sourceIdxOfSubString - 1 downTo 0) {
-            if (s[idx] == globalChar) {
-                globalLongest++
-            } else {
-                if (counter <= 0) {
-                    break
-                }
-                globalLongest++
-                counter--
+            if (end - start + 1 - longest > k) {
+                freq[s[end] - 'A']--
+                end++
             }
         }
-        for (idx in destinationIdxOfSubString + 1..s.lastIndex) {
-            if (s[idx] == globalChar) {
-                globalLongest++
-            } else {
-                if (counter <= 0) {
-                    break
-                }
-                globalLongest++
-                counter--
-            }
-        }
-
-        return globalLongest
+        return s.length - end
     }
 }
 

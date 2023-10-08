@@ -1,8 +1,9 @@
-package LeetCode1108
+package com.harera.leetcode.leetcode1108
 
 import java.util.*
 
-internal class Solution {
+class Solution {
+
     fun defangIPaddr(address: String?): String? {
         var address = address
         val stk = StringTokenizer(address, ".")
@@ -13,11 +14,8 @@ internal class Solution {
         address = sb.substring(0, sb.length - 3)
         return address
     }
+}
 
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            println(Solution().defangIPaddr("1.1.1.1"))
-        }
-    }
+fun main(args: Array<String>) {
+
 }
