@@ -1,11 +1,6 @@
-package LeetCode236
+package com.harera.leetcode.leetcode236
 
 import java.util.*
-
-fun main() {
-
-
-}
 
 class TreeNode(var `val`: Int = 0) {
     var left: TreeNode? = null
@@ -13,62 +8,98 @@ class TreeNode(var `val`: Int = 0) {
 }
 
 class Solution {
+
     fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
-        if (searchConnectivity(p!!, q!!) != null)
-            return p
+        if (p == null || q == null)
+            return null
 
-        if (searchConnectivity(q, p) != null)
-            return q
-
-        return searchChild(root!!, q, p)
-    }
-
-    private fun searchChild(first: TreeNode, q: TreeNode, p: TreeNode): TreeNode? {
-        val list = LinkedList<TreeNode>()
-        list.add(first)
-
-        while (list.isNotEmpty()) {
-            val cur = list.poll()
-
-            if (cur.left != null) {
-                if (cur.left!!.`val` == p.`val` || cur.left!!.`val` == q.`val`)
-                    return cur
-                list.add(cur.left!!)
-            }
-
-            if (cur.right != null) {
-                if (cur.right!!.`val` == p.`val` || cur.right!!.`val` == q.`val`)
-                    return cur
-
-                list.add(cur.right!!)
-            }
+        var pAncestors = getAncestors(q, p.`val`, emptyList()).sortedBy {
+            it.`val`
+        }.let {
+            LinkedList(it)
         }
 
+        if (pAncestors.isNotEmpty())
+            return pAncestors.peek()
+
+        var qAncestors = getAncestors(p, q.`val`, emptyList()).sortedBy {
+            it.`val`
+        }.let {
+            LinkedList(it)
+        }
+
+        if (qAncestors.isNotEmpty())
+            return qAncestors.peek()
+
+        pAncestors = getAncestors(root, p.`val`, emptyList()).sortedBy {
+            it.`val`
+        }.let {
+            LinkedList(it)
+        }
+        qAncestors = getAncestors(root, q.`val`, emptyList()).sortedBy {
+            it.`val`
+        }.let {
+            LinkedList(it)
+        }
+
+        while (qAncestors.isNotEmpty() && pAncestors.isNotEmpty()) {
+            if (qAncestors.peek().`val` < pAncestors.peek().`val`) {
+                qAncestors.poll()
+                continue
+            }
+            if (qAncestors.peek().`val` > pAncestors.peek().`val`) {
+                pAncestors.poll()
+                continue
+            }
+            return qAncestors.poll()
+        }
         return null
     }
 
-    private fun searchConnectivity(q: TreeNode, p: TreeNode): TreeNode? {
-        if (q.left == null && q.right == null) {
-            return null
+    private fun getAncestors(root: TreeNode?, child: Int, ancestors: List<TreeNode>): List<TreeNode> {
+        if (root == null) {
+            return emptyList()
         }
 
-        var ans: TreeNode? = null
-
-        if (q.left != null) {
-            if (q.left!!.`val` == p.`val`)
-                return q
-
-            ans = searchConnectivity(q.left!!, p) ?: ans
-        }
-
-        if (q.right != null) {
-            if (q.right!!.`val` == p.`val`)
-                return q
-
-            ans = searchConnectivity(q.right!!, p) ?: ans
-        }
+        if (root.`val` == child)
+            return ancestors.apply {
+                plus(root)
+            }
 
 
-        return ans
+        val left = getAncestors(root.left, child, ancestors.plus(root))
+        if (left.isNotEmpty())
+            return left
+
+        val right = getAncestors(root.right, child, ancestors.plus(root))
+        if (right.isNotEmpty())
+            return right
+
+        return emptyList()
+    }
+
+}
+
+fun main() {
+    // [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+    val solution = Solution()
+    solution.lowestCommonAncestor(
+        TreeNode(3).apply {
+            left = TreeNode(5).apply {
+                left = TreeNode(6)
+                right = TreeNode(2).apply {
+                    left = TreeNode(7)
+                    right = TreeNode(4)
+                }
+            }
+            right = TreeNode(1).apply {
+                left = TreeNode(0)
+                right = TreeNode(8)
+            }
+        },
+        TreeNode(5),
+        TreeNode(4)
+    ).let {
+        println(it)
     }
 }

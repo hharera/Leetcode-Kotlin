@@ -33,7 +33,7 @@ fun main() {
     // 8 test cases
     println(
         Solution().wordBreak(
-            "leetcode",
+            "leetcode224",
             listOf(
                 "leet", "code"
             )
@@ -72,5 +72,5 @@ fun main() {
         )
     )
 
-    println(Solution().wordBreak("leetcode", listOf("leet", "code")))
+    println(Solution().wordBreak("leetcode224", listOf("leet", "code")))
 }

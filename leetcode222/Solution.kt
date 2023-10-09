@@ -1,4 +1,4 @@
-package com.harera.leetcode.leetcode222
+package com.harera.leetcode.leetcode22
 
 import java.util.*
 
@@ -19,4 +19,5 @@ class Solution {
 
 fun main(args: Array<String>) {
     val solution = Solution()
+    println(solution.generateParenthesis(5))
 }

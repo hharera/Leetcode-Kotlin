@@ -1,4 +1,4 @@
-package LeetCode268
+package com.harera.leetcode.leetcode268
 
 fun missingNumber(nums: IntArray): Int {
     var sum: Long = 0
@@ -17,7 +17,7 @@ fun missingNumber(nums: IntArray): Int {
 fun main() {
     missingNumber(
         arrayOf(
-            9,6,4,2,3,5,7,0,1
+            9, 6, 4, 2, 3, 5, 7, 0, 1
         ).toIntArray()
     )
 }
