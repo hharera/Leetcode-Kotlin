@@ -1,5 +1,8 @@
 package LeetCode1290
 
+import com.harera.leetcode.leetcode1296.ListNode
+import com.harera.leetcode.leetcode1296.Solution
+
 internal class Solution {
     fun getDecimalValue(head: ListNode?): Int {
         var head = head

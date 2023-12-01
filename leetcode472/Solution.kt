@@ -3,44 +3,78 @@ package com.harera.leetcode.leetcode472
 
 class Solution {
 
-    private lateinit var words: Set<String>
+    private var visited = HashMap<String, Int>()
+    private lateinit var wordSet: Set<String>
+    private var root = TrieNode()
 
     fun findAllConcatenatedWordsInADict(words: Array<String>): List<String> {
-        this.words = words.toSet()
+        wordSet = words.toSet()
+        wordSet.forEach {
+            buildTrie(it)
+        }
 
         val result = mutableListOf<String>()
         words.forEach {
-            if (it.length > 1 && check(it)) {
+            if (it.length > 1 && solve(it)) {
                 result.add(it)
             }
         }
         return result
     }
 
-    private fun check(word: String): Boolean {
-        if (word.isEmpty())
-            return true
-        if (word.length == 1) {
-            return words.contains(word)
+    private fun buildTrie(word: String) {
+        var _root = root
+        word.forEachIndexed { index, char ->
+            _root.chars[char - 'a'] = _root.chars.getOrElse(char - 'a') {
+                TrieNode()
+            }.also {
+                it!!.end = false
+                if (index == word.lastIndex)
+                    it.end = true
+
+                _root = it
+            }
+        }
+    }
+
+    private fun solve(trie: TrieNode, combinedWord: String = "", wordsCount: Int = 0): Int {
+        if (trie.end) {
+            if (wordSet.contains(combinedWord) && wordsCount > 0)
+                return 
+            if (combinedWord.isBlank() && wordsCount > 1)
+                return
+
         }
 
-        if (words.containsAll(word.toCharArray().map { it.toString() })) {
+
+        if (visited.contains(createdWord))
+            return visited[createdWord]!!
+
+        solve()
+
+
+        if (words.containsAll(createdWord.toCharArray().map { it.toString() })) {
             return true
         }
 
-        for (left in word.indices) {
-            for (right in left + 1..word.lastIndex) {
-                if (left == 0 && right == word.lastIndex)
+        for (left in createdWord.indices) {
+            for (right in left + 1..createdWord.lastIndex) {
+                if (left == 0 && right == createdWord.lastIndex)
                     continue
 
-                if (words.contains(word.substring(left, right + 1)))
-                    if (check(word.substring(right + 1, word.length))) {
+                if (words.contains(createdWord.substring(left, right + 1)))
+                    if (solve(createdWord.substring(right + 1, createdWord.length))) {
                         return true
                     }
             }
         }
         return false
     }
+}
+
+class TrieNode() {
+    var end = false
+    val chars = Array<TrieNode?>(26) { null }
 }
 
 
