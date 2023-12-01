@@ -1,80 +1,53 @@
-package LeetCode951
-
-fun main() {
-
-
-}
+package com.harera.leetcode.leetcode951
 
 class TreeNode(var `val`: Int) {
     var left: TreeNode? = null
     var right: TreeNode? = null
 }
 
-fun flipEquiv(root1: TreeNode?, root2: TreeNode?): Boolean {
-    if (root1 == null && root2 == null)
-        return true
+class Solution {
 
-    if ((root1 == null && root2 != null) || (root2 == null && root1 != null))
-        return false
+    fun flipEquiv(root1: TreeNode?, root2: TreeNode?): Boolean {
+        return equals(root1, root2)
+    }
 
-    if (root1!!.`val` != root2!!.`val`)
-        return false
+    private fun equals(root1: TreeNode?, root2: TreeNode?): Boolean {
+        if (root1 == null) {
+            return root2 == null
+        }
+        if (root2 == null) {
+            return false
+        }
 
-    return search(root1, root2)
+        if (root1.`val` != root2.`val`)
+            return false
+
+        return (equals(root1.left, root2.left) && equals(root1.right, root2.right) ||
+                equals(root1.left, root2.right) && equals(root1.right, root2.left))
+    }
 }
 
-fun search(root1: TreeNode, root2: TreeNode): Boolean {
-    var leftNulls = 0
-    var rightNulls = 0
-    if (root1.left == null)
-        leftNulls++
-    if (root1.right == null)
-        leftNulls++
-    if (root2.right == null)
-        rightNulls++
-    if (root2.left == null)
-        rightNulls++
+fun main() {
+    val solution = Solution()
+    val root1 = TreeNode(1)
+    root1.left = TreeNode(2)
+    root1.right = TreeNode(3)
+    root1.left!!.left = TreeNode(4)
+    root1.left!!.right = TreeNode(5)
+    root1.left!!.right!!.left = TreeNode(7)
+    root1.left!!.right!!.right = TreeNode(8)
+    root1.right!!.left = TreeNode(6)
 
-    if (leftNulls != rightNulls)
-        return false
+    val root2 = TreeNode(1)
+    root2.left = TreeNode(3)
+    root2.right = TreeNode(2)
+    root2.right!!.left = TreeNode(4)
+    root2.right!!.right = TreeNode(5)
+    root2.right!!.right!!.left = TreeNode(8)
+    root2.right!!.right!!.right = TreeNode(7)
+    root2.left!!.right = TreeNode(6)
 
-    var result = true
-
-    if (root1.left != null && root2.left != null) {
-        if (root1.left?.`val` == root2.left?.`val`) {
-            if (root1.right?.`val` != root2.right?.`val`) {
-                return false
-            }
-            result = result && search(root1.left!!, root2.left!!)
-        }
+    solution.flipEquiv(root1, root2).also {
+        println(it)
     }
-
-    if (root1.right != null && root2.right != null) {
-        if (root1.right?.`val` == root2.right?.`val`) {
-            if (root1.left?.`val` != root2.left?.`val`) {
-                return false
-            }
-            result = result && search(root1.right!!, root2.right!!)
-        }
-    }
-
-    if (root1.right != null && root2.left != null) {
-        if (root1.right?.`val` == root2.left?.`val`) {
-            if (root1.left?.`val` != root2.right?.`val`) {
-                return false
-            }
-            result = result && search(root1.right!!, root2.left!!)
-        }
-    }
-
-    if (root1.left != null && root2.right != null) {
-        if (root1.left?.`val` == root2.right?.`val`) {
-            if (root1.right?.`val` != root2.left?.`val`) {
-                return false
-            }
-            result = result && search(root1.left!!, root2.right!!)
-        }
-    }
-
-    return result
 }

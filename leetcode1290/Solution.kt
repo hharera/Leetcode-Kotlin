@@ -1,7 +1,5 @@
 package LeetCode1290
 
-import com.harera.leetcode.leetcode1296.ListNode
-import com.harera.leetcode.leetcode1296.Solution
 
 internal class Solution {
     fun getDecimalValue(head: ListNode?): Int {
@@ -25,7 +23,6 @@ internal class Solution {
             val h = ListNode(1)
             h.next = ListNode(0)
             h.next!!.next = ListNode(1)
-            println(Solution().getDecimalValue(h))
         }
     }
 }
