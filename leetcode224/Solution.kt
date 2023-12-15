@@ -38,7 +38,7 @@ class Solution {
                 c.isLetterOrDigit() -> result += c
                 c == '(' -> stack.push(c)
                 c == ')' -> {
-                    while (!stack.isEmpty() && stack.peek() != '(') {
+                    while (stack.isNotEmpty() && stack.peek() != '(') {
                         result += stack.pop()
                     }
                     stack.pop()
@@ -74,5 +74,5 @@ class Solution {
 }
 
 fun main() {
-    println(Solution().calculate("(1+(4+5+2)-3)+(6+8)"))
+    println(Solution().calculate("(1+(4+5+2)-3)+(6*8)"))
 }
