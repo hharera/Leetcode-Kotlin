@@ -1,78 +1,62 @@
 package com.harera.leetcode.leetcode472
 
-//
-//class Solution {
-//
-//    private var visited = HashMap<String, Int>()
-//    private lateinit var wordSet: Set<String>
-//    private var root = TrieNode()
-//
-//    fun findAllConcatenatedWordsInADict(words: Array<String>): List<String> {
-//        wordSet = words.toSet()
-//        wordSet.forEach {
-//            buildTrie(it)
-//        }
-//
-//        val result = mutableListOf<String>()
-//        words.forEach {
-//            if (it.length > 1 && solve(it)) {
-//                result.add(it)
-//            }
-//        }
-//        return result
-//    }
-//
-//    private fun buildTrie(word: String) {
-//        var _root = root
-//        word.forEachIndexed { index, char ->
-//            _root.chars[char - 'a'] = _root.chars.getOrElse(char - 'a') {
-//                TrieNode()
-//            }.also {
-//                it!!.end = false
-//                if (index == word.lastIndex)
-//                    it.end = true
-//
-//                _root = it
-//            }
-//        }
-//    }
-//
-//    private fun solve(trie: TrieNode, combinedWord: String = "", wordsCount: Int = 0): Int {
-//        if (trie.end) {
-//            if (wordSet.contains(combinedWord) && wordsCount > 0)
-//                return
-//            if (combinedWord.isBlank() && wordsCount > 1)
-//                return
-//
-//        }
-//
-//
-//        if (visited.contains(createdWord))
-//            return visited[createdWord]!!
-//
-//        solve()
-//
-//
-//        if (words.containsAll(createdWord.toCharArray().map { it.toString() })) {
-//            return true
-//        }
-//
-//        for (left in createdWord.indices) {
-//            for (right in left + 1..createdWord.lastIndex) {
-//                if (left == 0 && right == createdWord.lastIndex)
-//                    continue
-//
-//                if (words.contains(createdWord.substring(left, right + 1)))
-//                    if (solve(createdWord.substring(right + 1, createdWord.length))) {
-//                        return true
-//                    }
-//            }
-//        }
-//        return false
-//    }
-//}
-//
-//class TrieNode() {
-//    var end = false
-//    val chars = Array<TrieNode?>(26) { null }
-//}
+
+class Solution {
+
+    private lateinit var wordSet: Set<String>
+    private var root = TrieNode()
+
+    fun findAllConcatenatedWordsInADict(words: Array<String>): List<String> {
+        wordSet = words.toSet()
+        wordSet.forEach {
+            buildTrie(it)
+        }
+
+        val result = mutableListOf<String>()
+        words.forEach {
+            if (it.length > 1 && countEnds(root, it, idx = 0) > 1) {
+                result.add(it)
+            }
+        }
+        return result
+    }
+
+    private fun buildTrie(word: String) {
+        var _root = root
+        word.forEachIndexed { index, char ->
+            if (_root.chars[char - 'a'] == null) {
+                _root.chars[char - 'a'] = TrieNode().also {
+                    if (index == word.lastIndex)
+                        it.end = true
+                }
+            }
+            _root = _root.chars[char - 'a']!!
+        }
+    }
+
+    private fun countEnds(trie: TrieNode, word: String, idx: Int = 0): Int {
+        if (idx > word.lastIndex) {
+            return 0
+        }
+
+        if (trie.chars[word[idx] - 'a'] == null)
+            return 0
+
+        var answer = 0
+        if (trie.chars[word[idx] - 'a']!!.end)
+            answer += 1
+
+        return answer + countEnds(trie.chars[word[idx] - 'a']!!, word, idx + 1)
+    }
+
+    class TrieNode {
+        var end = false
+        val chars = Array<TrieNode?>(26) { null }
+    }
+}
+
+
+fun main() {
+    val solution = Solution()
+    println(solution.findAllConcatenatedWordsInADict(arrayOf("cat", "cats", "dog", "catdog")))
+}

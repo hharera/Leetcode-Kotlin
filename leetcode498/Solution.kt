@@ -2,40 +2,35 @@ package com.harera.leetcode.leetcode498
 
 class Solution {
     fun findDiagonalOrder(mat: Array<IntArray>): IntArray {
-        return solve(mat = mat, row = 0, col = 0, upperDir = true, result = mutableListOf<Int>()).toIntArray()
-    }
-
-    private fun solve(
-        mat: Array<IntArray>,
-        row: Int,
-        col: Int,
-        upperDir: Boolean,
-        result: MutableList<Int>
-    ): MutableList<Int> {
-        result.add(mat[row][col])
-
-        if (row == mat.lastIndex && col == mat[0].lastIndex)
-            return result
-
-        if (upperDir) {
-            if (col + 1 > mat[0].lastIndex) {
-                solve(mat, row + 1, col, false, result)
-            } else if (row - 1 < 0) {
-                solve(mat, row, col + 1, false, result)
-            } else {
-                solve(mat, row - 1, col + 1, true, result)
+        val diagonal = mutableListOf<ArrayList<Int>>()
+        for (diag in mat[0].indices) {
+            var row = 0
+            var col = diag
+            val list = ArrayList<Int>()
+            while (row < mat.size && col >= 0) {
+                list.add(mat[row][col])
+                row++
+                col--
             }
-        } else {
-            if (col - 1 < 0) {
-                solve(mat, row, col + 1, true, result)
-            } else if (row + 1 > mat.lastIndex) {
-                solve(mat, row - 1, col + 2, true, result)
-            } else {
-                solve(mat, row + 1, col - 1, false, result)
-            }
+            diagonal.add(list)
         }
 
-        return result
+        for (diag in 1 until mat.size) {
+            var row = diag
+            var col = mat[0].lastIndex
+            val list = ArrayList<Int>()
+            while (row < mat.size && col >= 0) {
+                list.add(mat[row][col])
+                row++
+                col--
+            }
+            diagonal.add(list)
+        }
+        for (i in diagonal.indices) {
+            if (i % 2 == 0)
+                diagonal[i].reverse()
+        }
+        return diagonal.flatten().toIntArray()
     }
 }
 
@@ -55,11 +50,13 @@ fun main() {
             .toMutableList()
     )
     println(solution.findDiagonalOrder(arrayOf(intArrayOf(1, 2), intArrayOf(3, 4))).toMutableList())
-    solution.findDiagonalOrder(
-        arrayOf(
-            intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-            intArrayOf(11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
-            intArrayOf(21, 22, 23, 24, 25, 26, 27, 28, 29, 30)
+    println(
+        solution.findDiagonalOrder(
+            arrayOf(
+                intArrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+                intArrayOf(11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+                intArrayOf(21, 22, 23, 24, 25, 26, 27, 28, 29, 30)
+            )
         )
     )
 }
