@@ -1,47 +1,62 @@
-package LeetCode939
+package com.harera.leetcode.leetcode939
 
 import kotlin.math.abs
-import kotlin.math.max
+
+class Solution {
+
+    fun minAreaRect(points: Array<IntArray>): Int {
+        val xs = HashMap<Int, MutableList<Int>>()
+        val ys = HashMap<Int, MutableList<Int>>()
+
+        for (point in points) {
+            xs[point[0]] = xs.getOrDefault(point[0], mutableListOf()).apply { add(point[1]) }
+            ys[point[1]] = ys.getOrDefault(point[1], mutableListOf()).apply { add(point[0]) }
+        }
+        xs.values.forEach { it.sort() }
+        ys.values.forEach { it.sort() }
+
+        var answer = Int.MAX_VALUE
+        xs.keys.forEach {
+            val x1 = it
+            var y1 = xs[it]!![0]
+            for (i in 1 until xs[it]!!.size) {
+                val y2 = xs[it]!![i]
+                if (y1 == y2) continue
+
+                var i = 0
+                var j = 0
+                while (i < ys.get(y1)!!.size && j < ys.get(y2)!!.size) {
+                    if (ys.get(y1)!![i] < ys.get(y2)!![j]) {
+                        i++
+                    } else if (ys.get(y1)!![i] > ys.get(y2)!![j]) {
+                        j++
+                    } else {
+                        val x2 = ys.get(y1)!![i]
+                        minOf(answer, abs(x2 - x1) * abs(y1 - y2)).let {
+                            if (it != 0) answer = it
+                        }
+                        i++
+                    }
+                }
+                y1 = y2
+            }
+        }
+
+        return if (answer == Int.MAX_VALUE) 0 else answer
+    }
+}
 
 fun main() {
+    val solution = Solution()
     println(
-        minAreaRect(
+        solution.minAreaRect(
             arrayOf(
-                arrayOf(3, 3).toIntArray(),
-                arrayOf(3, 1).toIntArray(),
-                arrayOf(4, 3).toIntArray(),
-                arrayOf(4, 1).toIntArray(),
+                intArrayOf(1, 1),
+                intArrayOf(1, 3),
+                intArrayOf(3, 1),
+                intArrayOf(3, 3),
+                intArrayOf(2, 2)
             )
         )
     )
-}
-
-fun minAreaRect(points: Array<IntArray>): Int {
-    val lines = HashMap<Int, HashSet<Int>>()
-
-    for (point in points) {
-        if (lines.containsKey(point[1]))
-            lines.get(point[1])!!.add(point[0])
-        else {
-            lines.set(point[1], HashSet())
-            lines.get(point[1])!!.add(point[0])
-        }
-    }
-
-    var ans = 0
-    for (point in points) {
-        for (_point in points) {
-            if (point[1] == _point[1] && point[0] == _point[0])
-                continue
-
-            if (lines.get(point[1])!!.contains(_point[0]) && lines.get(_point[1])!!.contains(point[0])) {
-                ans = max(
-                    ans,
-                    abs(point[0] - _point[0]) * abs(point[1] - _point[1])
-                )
-            }
-        }
-    }
-
-    return ans
 }

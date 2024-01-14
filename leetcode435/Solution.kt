@@ -1,27 +1,26 @@
 package com.harera.leetcode.leetcode435
 
+import java.util.*
 
 class Solution {
     fun eraseOverlapIntervals(intervals: Array<IntArray>): Int {
         val localIntervals = intervals.sortedBy {
-            it[0]
+            it[1]
         }.toMutableList()
 
-        var index = 0
+        val stack = Stack<IntArray>()
+        stack.push(localIntervals[0])
+        var index = 1
         var answer = 0
-        while (index < localIntervals.lastIndex) {
-            val i1 = localIntervals[index][0]
-            val i2 = localIntervals[index][1]
-            val j1 = localIntervals[index + 1][0]
-            val j2 = localIntervals[index + 1][1]
+        while (index < localIntervals.size) {
+            val pStart = stack.peek()[0]
+            val pEnd = stack.peek()[1]
+            val cStart = localIntervals[index][0]
+            val cEnd = localIntervals[index][1]
 
-            if (j1 in i1 until i2) {
-                if (j2 > i2) {
-                    localIntervals.removeAt(index + 1)
-                } else {
-                    localIntervals.removeAt(index)
-                }
-                index--
+            if (cStart >= pEnd) {
+                stack.push(localIntervals[index])
+            } else {
                 answer++
             }
             index++
@@ -29,7 +28,6 @@ class Solution {
         return answer
     }
 }
-
 fun main() {
     val case1 = arrayOf(
         arrayOf(1, 2).toIntArray(),
