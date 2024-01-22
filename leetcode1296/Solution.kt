@@ -1,45 +1,45 @@
 package com.harera.leetcode.leetcode1296
 
-//class Solution {
-//
-//    private val map = HashMap<Int, Int>()
-//
-//    fun isPossibleDivide(nums: IntArray, k: Int): Boolean {
-//        if ((nums.sum() / k) % k != 0) {
-//            return false
-//        }
-//
-//        nums.forEach {
-//            map[it] = map.getOrDefault(it, 0) + 1
-//        }
-//
-//        val eachSize = nums.sum() / k
-//        for (idx in 1..k) {
-//            createSubArray(keys = nums, remaining = eachSize, array = listOf())
-//        }
-//        return true
-//    }
-//
-//    private fun createSubArray(
-//        idx: Int = 0,
-//        keys: IntArray,
-//        remaining: Int,
-//        array: List<Int>
-//    ): List<Int>? {
-//        if (idx > keys.lastIndex)
-//            return null
-//        if (remaining < 0)
-//            return null
-//        if (remaining == 0)
-//            return array
-//
-//        createSubArray(idx + 1, keys, remaining - keys[idx], array.plus(keys[idx]))
-//    }
-//}
-//
-//fun main() {
-//    val solution = Solution()
-//    solution.isPossibleDivide(intArrayOf(1, 2, 3, 3, 4, 4, 5, 6), 4).also {
-//        println(it)
-//    }
-//}
+class Solution {
+    fun isPossibleDivide(nums: IntArray, k: Int): Boolean {
+        if (nums.size % k != 0)
+            return false
+
+        if (k == 1)
+            return true
+
+        if (k == nums.size)
+            return nums.sorted().let {
+                for (i in 0 until it.lastIndex) {
+                    if (it[i + 1] - it[i] != 1)
+                        return false
+                }
+                return true
+            }
+
+        val freq = hashMapOf<Int, Int>()
+        nums.forEach {
+            freq[freq.getOrDefault(it, 0) + 1]
+        }
+
+        val keys = freq.keys.sorted()
+        for (start in 0..keys.lastIndex - k) {
+            for (end in start until start + k) {
+                if (freq[keys[end + 1]]!! - freq[keys[end]]!! != 1)
+                    return false
+            }
+            for (end in start..start + k) {
+                freq[keys[end]] = freq[keys[end]]!! - freq[keys[start]]!!
+            }
+
+            if (freq[keys[start]] != 0)
+                return false
+        }
+        return true
+    }
+}
+
+fun main() {
+    val solution = Solution()
+    println(solution.isPossibleDivide(intArrayOf(16, 21, 26, 35), 4))
+}

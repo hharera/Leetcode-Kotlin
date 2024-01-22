@@ -4,26 +4,26 @@ import kotlin.math.max
 
 class Solution {
 
-    private val dp = Array<Int>(2500) { -1 }
+    private val dp = Array(2500) { Array(2505) { -1 } }
 
     fun lengthOfLIS(nums: IntArray): Int {
         return solve(nums, 0, Int.MIN_VALUE)
     }
 
-    private fun solve(nums: IntArray, idx: Int, prev: Int): Int {
+    private fun solve(nums: IntArray, idx: Int, max: Int, lastIdx: Int = 2504): Int {
         if (idx > nums.lastIndex)
             return 0
 
-        if (dp[idx] != -1)
-            return dp[idx]
+        if (dp[idx][lastIdx] != -1)
+            return dp[idx][lastIdx]
 
-        val leave = solve(nums, idx + 1, prev)
-        if (nums[idx] <= prev)
+        val leave = solve(nums, idx + 1, max, lastIdx)
+        if (nums[idx] <= max)
             return leave
 
-        val pick = solve(nums, idx + 1, nums[idx])
-        return max(pick + 1, leave).also {
-            dp[idx] = it
+        val pick = 1 + solve(nums, idx + 1, nums[idx], idx)
+        return max(pick, leave).also {
+            dp[idx][lastIdx] = it
         }
     }
 }
@@ -31,5 +31,5 @@ class Solution {
 fun main() {
     // 5 test cases
     val solution = Solution()
-    println(solution.lengthOfLIS(intArrayOf(0, 1, 0, 3, 2, 3)))
+    println(solution.lengthOfLIS(intArrayOf(7,7,7)))
 }

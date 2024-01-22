@@ -7,31 +7,31 @@ class Solution {
     fun numDecodings(s: String): Int {
         if (s.isEmpty())
             return 0
-        if (s.length == 1)
-            return if (s[0] == '0') 0 else 1
         return solve(0, s)
     }
 
     private fun solve(idx: Int, s: String): Int {
+        if (idx > s.lastIndex)
+            return 1
+        if (s[idx] == '0')
+            return 0
         if (idx == s.lastIndex)
             return 1
 
         if (dp[idx] != -1)
             return dp[idx]
 
-        val next = if (s[idx + 1] == '0' || s[idx] != '0')
-            solve(idx + 1, s)
-        else 0
-        val nextNext = if (idx + 1 < s.lastIndex && s.substring(idx..idx + 1).toInt() < 27)
-            solve(idx + 2, s)
-        else 0
-
-        dp[idx] = next + nextNext
-        return dp[idx]
+        var answer = 0
+        answer += solve(idx + 1, s)
+        if (s.substring(idx, idx + 2).toInt() <= 26)
+            answer += solve(idx + 2, s)
+        return answer.also {
+            dp[idx] = it
+        }
     }
 }
 
 fun main() {
     val solution = Solution()
-    println(solution.numDecodings("111"))
+    println(solution.numDecodings("111111111111111111111111111111111111111111111"))
 }
