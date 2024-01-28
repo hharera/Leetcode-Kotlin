@@ -1,7 +1,6 @@
 package com.harera.leetcode.leetcode769
 
 import kotlin.math.max
-import kotlin.math.min
 
 class Solution {
     fun maxChunksToSorted(arr: IntArray): Int {
@@ -10,8 +9,11 @@ class Solution {
 
     private fun solve(arr: MutableList<Int>, idx: Int): Int {
         if (arr == arr.sorted()) {
+            if (idx >= arr.lastIndex)
+                return 0
             return 1
         }
+
         if (idx > arr.lastIndex)
             return Int.MAX_VALUE
 
@@ -21,6 +23,7 @@ class Solution {
             temp.subList(idx, idx + size).sorted().forEachIndexed { index, i ->
                 temp[idx + index] = i
             }
+            println(temp + " " + idx + " " + size)
             val solution = solve(temp, idx + size)
             if (solution != Int.MAX_VALUE)
                 result = max(result, solution + 1)
@@ -31,5 +34,5 @@ class Solution {
 
 fun main() {
     val solution = Solution()
-    println(solution.maxChunksToSorted(intArrayOf(1, 0, 2, 3, 4)))
+    println(solution.maxChunksToSorted(intArrayOf(1, 2, 0, 3)))
 }
