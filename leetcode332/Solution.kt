@@ -1,11 +1,13 @@
 package com.harera.leetcode.leetcode332
 
+import java.util.*
+
 class Solution {
 
-    private val graph = HashMap<String, HashSet<String>>()
+    private val graph = HashMap<String, LinkedList<String>>()
     fun findItinerary(tickets: List<List<String>>): List<String> {
         tickets.forEach {
-            graph[it[0]] = graph.getOrDefault(it[0], HashSet()).apply {
+            graph[it[0]] = graph.getOrDefault(it[0], LinkedList()).apply {
                 add(it[1])
             }
         }

@@ -1,25 +1,33 @@
 package com.harera.leetcode.leetcode274
 
-import kotlin.math.max
-
 class Solution {
     fun hIndex(citations: IntArray): Int {
-        val hashMap = HashMap<Int, Int>()
-        citations.forEach {
-            hashMap[it] = hashMap.getOrDefault(it, 0) + 1
+        citations.sortDescending()
+        for (h in 1000 downTo  1) {
+            if(search(citations, h) >= h) {
+                return h
+            }
         }
-        val commutative = Array<Int>(citations.size + 1) { 0 }
-        var max = 0
-        hashMap.keys.sortedDescending().forEachIndexed { index, i ->
-            commutative[index + 1] = commutative[index] + hashMap[i]!!
-            if (commutative[index + 1] >= i)
-                max = max(max, i)
-            max = max(max, hashMap[i]!!)
+        return 0
+    }
+
+    private fun search(citations: IntArray, h: Int): Int {
+        var start = 0
+        var end = citations.lastIndex
+        while (start <= end) {
+            val mid = (start + end) / 2
+            if (citations[mid] >= h) {
+                start = mid + 1
+            } else {
+                end = mid - 1
+            }
         }
-        return max
+        return start
     }
 }
 
 fun main() {
-
+    val solution = Solution()
+    // [1,7,9,4]
+    println(solution.hIndex(intArrayOf(1,7,9,4)))
 }

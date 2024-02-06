@@ -2,8 +2,9 @@ package com.harera.leetcode.leetcode658
 
 class Solution {
     fun findClosestElements(arr: IntArray, k: Int, x: Int): List<Int> {
-        var lessIdx = findLessThanOrEqualX(arr, x)
-        var greaterIdx = findGreaterThanOrEqualX(arr, x)
+        arr.sort()
+        var lessIdx = findLessThanOrEqualX(arr.sorted(), x)
+        var greaterIdx = findGreaterThanOrEqualX(arr.sorted(), x)
         var remaining = k
         if (lessIdx == greaterIdx)
             lessIdx -= 1
@@ -33,7 +34,7 @@ class Solution {
         return result.sorted()
     }
 
-    private fun findGreaterThanOrEqualX(arr: IntArray, x: Int): Int {
+    private fun findGreaterThanOrEqualX(arr: List<Int>, x: Int): Int {
         var start = 0
         var end = arr.size - 1
         while (start < end) {
@@ -47,7 +48,7 @@ class Solution {
         return start
     }
 
-    private fun findLessThanOrEqualX(arr: IntArray, x: Int): Int {
+    private fun findLessThanOrEqualX(arr: List<Int>, x: Int): Int {
         var start = 0
         var end = arr.size - 1
         while (start < end) {

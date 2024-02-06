@@ -3,22 +3,21 @@ package com.harera.leetcode.leetcode189
 class Solution {
     fun rotate(nums: IntArray, k_: Int): Unit {
         val k = k_ % nums.size
-        if(k == 0)
+        if (k == 0)
             return
 
         val mid = nums.size / 2
-        for (idx in nums.indices) {
-            if (idx < mid) {
+        for (idx in 0 until mid) {
+            val temp = nums[idx]
+            nums[idx] = nums[(idx - k + nums.size) % nums.size]
+            nums[(idx - k + nums.size) % nums.size] = temp
+        }
+
+        if (k < nums.size / 2 && nums.size % 2 != 0) {
+            for (idx in mid until nums.lastIndex) {
                 val temp = nums[idx]
-                nums[idx] = nums[(idx - k + nums.size) % nums.size]
-                nums[(idx - k + nums.size) % nums.size] = temp
-            } else if (idx < mid * 2) {
-                val temp = nums[idx]
-                val replaced = (idx - k + nums.size) % nums.size
-                nums[idx] = nums[(replaced - k + nums.size) % nums.size]
-                nums[(replaced - k + nums.size) % nums.size] = temp
-//            } else {
-//                println()
+                nums[idx] = nums[idx + 1]
+                nums[idx + 1] = temp
             }
         }
     }
