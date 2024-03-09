@@ -3,29 +3,33 @@ package com.harera.leetcode.leetcode10
 class Solution {
 
     fun isMatch(s: String, p: String): Boolean {
-        return check(s, p)
+        return check(s, p, idx = 0)
     }
 
-    private fun check(s: String, p: String): Boolean {
-        val pE = p[0]
-        val sE = s[0]
-        if (p.length > 1 && p.get(1) == '*') {
-            if (pE.isLetter() && pE != sE)
-                return check(s, p.substring(2))
-            else {
-                return check(s.substring(1), p.substring(2)) ||
-                        check(s.substring(1), p) ||
-                        check(s, p.substring(2))
-            }
-        } else if (pE.isLetter() && pE != sE) {
+    private fun check(s: String, p: String, idx: Int): Boolean {
+        if (idx > p.lastIndex || idx > s.lastIndex) {
+            if (p == s) return true
+            if (p.all { it == '.' } && p.length == s.length) return true
             return false
         }
 
-        return check(s.substring(1), p.substring(1))
+        if (p[idx].isLowerCase()) {
+            return check(s, p, idx + 1)
+        } else if (p[idx] == '*') {
+            var _p = p.substring(0, idx + 1).dropLast(2) + p.substring(idx + 1, p.length)
+            val ignore = check(s, _p, idx - 1)
+            _p = p.substring(0, idx) + p[idx - 1] + p.substring(idx + 1, p.length)
+            val match = check(s, _p, idx + 1)
+            _p = p.substring(0, idx) + p[idx - 1] + '*' + p.substring(idx + 1, p.length)
+            return ignore || match || check(s, _p, idx + 1)
+        } else {
+            var _p = p.substring(0, idx) + s[idx] + p.substring(idx + 1, p.length)
+            return check(s, _p, idx + 1) || check(s, p, idx + 1)
+        }
     }
 }
 
 fun main() {
     val solution = Solution()
-    println(solution.isMatch("a", "ab*"))
+    println(solution.isMatch("aab", "c*a*b"))
 }
