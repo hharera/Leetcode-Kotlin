@@ -3,25 +3,31 @@ package com.harera.leetcode.leetcode204
 class Solution {
 
     fun countPrimes(n: Int): Int {
-        val setOfNonPrimes = mutableSetOf<Int>()
-        val sqrt = Math.sqrt(n.toDouble()).toInt()
-
-        for (base in sqrt downTo 2) {
-            var pow = 1
-            for (idx in 1..23) {
-                pow *= base
-                if (pow <= 0 || pow >= n)
-                    break
-                for (multiplier in 2..2000) {
-                    val res = pow * multiplier
-                    if (res <= 0 || res >= n)
-                        break
-                    setOfNonPrimes.add(res)
-                }
+        if (n < 2)
+            return 0
+        val prime = BooleanArray(n + 1) { true }
+        prime[0] = false
+        prime[1] = false
+        var i = 2
+        while (i * i <= n) {
+            if (prime[i].not()) {
+                i++
+                continue
+            }
+            var j = i * i
+            while (j <= n) {
+                prime[j] = false
+                j += i
+            }
+            i++
+        }
+        var answer = 0
+        for (i in 2 until n) {
+            if (prime[i]) {
+                answer++
             }
         }
-
-        return n - setOfNonPrimes.size - 2
+        return answer
     }
 }
 
