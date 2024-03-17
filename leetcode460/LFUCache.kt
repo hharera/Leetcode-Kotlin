@@ -27,10 +27,10 @@ class LFUCache(val capacity: Int) {
                     usage.remove(item.key)
                     break
                 }
-            usage[key] = usage.getOrDefault(key, 0)
-            queue.add(Item(usage.getOrDefault(key, 0), key, currentTimeMillis()))
         }
         map.put(key, value)
+        usage[key] = usage.getOrDefault(key, 0) + 1
+        queue.add(Item(usage[key]!!, key, currentTimeMillis()))
     }
 
     private class Item(val usage: Int, val key: Int, val lastUsage: Long) : Comparable<Item> {
@@ -45,12 +45,13 @@ class LFUCache(val capacity: Int) {
 
 fun main() {
     val cache = LFUCache(2)
-
-    // [[2],[2,1],[1,1],[2,3],[4,1],[1],[2]]
-    cache.put(2, 1)
-    cache.put(1, 1)
-    cache.put(2, 3)
-    cache.put(4, 1)
+    // ["LFUCache","get","put","get","put","put","get","get"]
+    // [[2],[2],[2,6],[1],[1,5],[1,2],[1],[2]]
+    println(cache.get(2))
+    cache.put(2, 6)
+    println(cache.get(1))
+    cache.put(1, 5)
+    cache.put(1, 2)
     println(cache.get(1))
     println(cache.get(2))
 }
