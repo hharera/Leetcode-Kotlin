@@ -19,27 +19,31 @@ class Solution {
 
         val freq = hashMapOf<Int, Int>()
         nums.forEach {
-            freq[freq.getOrDefault(it, 0) + 1]
+            freq[it] = freq.getOrDefault(it, 0) + 1
         }
 
         val keys = freq.keys.sorted()
-        for (start in 0..keys.lastIndex - k) {
-            for (end in start until start + k) {
-                if (freq[keys[end + 1]]!! - freq[keys[end]]!! != 1)
+        for (start in 0..keys.size - k) {
+            if (freq[keys[start]] == 0)
+                continue
+
+            for (end in start until start + k - 1) {
+                if (keys[end + 1]!! - keys[end]!! != 1 || freq[keys[end + 1]]!! < freq[keys[end]]!!)
                     return false
             }
-            for (end in start..start + k) {
-                freq[keys[end]] = freq[keys[end]]!! - freq[keys[start]]!!
+            val baseFreq = freq[keys[start]]
+            for (end in start until start + k) {
+                freq[keys[end]] = freq[keys[end]]!! - baseFreq!!
             }
-
-            if (freq[keys[start]] != 0)
-                return false
         }
-        return true
+        return freq.values.all { it == 0 }
     }
 }
 
 fun main() {
     val solution = Solution()
     println(solution.isPossibleDivide(intArrayOf(16, 21, 26, 35), 4))
+    println(solution.isPossibleDivide(intArrayOf(1, 2, 3, 3, 4, 4, 5, 6), 4))
+    println(solution.isPossibleDivide(intArrayOf(3, 2, 1, 2, 3, 4, 3, 4, 5, 9, 10, 11), 3))
+    println(solution.isPossibleDivide(intArrayOf(1, 2, 2, 3, 4, 4, 5, 6, 7, 7, 8, 9), 4))
 }
