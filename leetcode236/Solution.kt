@@ -2,82 +2,52 @@ package com.harera.leetcode.leetcode236
 
 import java.util.*
 
-class TreeNode(var `val`: Int = 0) {
-    var left: TreeNode? = null
-    var right: TreeNode? = null
-}
-
 class Solution {
 
     fun lowestCommonAncestor(root: TreeNode?, p: TreeNode?, q: TreeNode?): TreeNode? {
-        if (p == null || q == null)
+        if (p == null || q == null || root == null)
             return null
 
-        var pAncestors = getAncestors(q, p.`val`, emptyList()).sortedBy {
-            it.`val`
-        }.let {
-            LinkedList(it)
-        }
-
-        if (pAncestors.isNotEmpty())
-            return pAncestors.peek()
-
-        var qAncestors = getAncestors(p, q.`val`, emptyList()).sortedBy {
-            it.`val`
-        }.let {
-            LinkedList(it)
-        }
-
-        if (qAncestors.isNotEmpty())
-            return qAncestors.peek()
-
-        pAncestors = getAncestors(root, p.`val`, emptyList()).sortedBy {
-            it.`val`
-        }.let {
-            LinkedList(it)
-        }
-        qAncestors = getAncestors(root, q.`val`, emptyList()).sortedBy {
-            it.`val`
-        }.let {
-            LinkedList(it)
-        }
-
-        while (qAncestors.isNotEmpty() && pAncestors.isNotEmpty()) {
-            if (qAncestors.peek().`val` < pAncestors.peek().`val`) {
-                qAncestors.poll()
-                continue
+        val ppath = getPath(root, p.`val`, Stack())
+        val qpath = getPath(root, q.`val`, Stack())
+        while (ppath.isNotEmpty() && qpath.isNotEmpty()) {
+            if (ppath.peek().`val` == qpath.peek().`val`) {
+                return ppath.pop()
+            } else if (ppath.size > qpath.size) {
+                ppath.pop()
+            } else {
+                qpath.pop()
             }
-            if (qAncestors.peek().`val` > pAncestors.peek().`val`) {
-                pAncestors.poll()
-                continue
-            }
-            return qAncestors.poll()
         }
-        return null
+        return root
     }
 
-    private fun getAncestors(root: TreeNode?, child: Int, ancestors: List<TreeNode>): List<TreeNode> {
-        if (root == null) {
-            return emptyList()
+    private fun getPath(root: TreeNode, search: Int, path: Stack<TreeNode>): Stack<TreeNode> {
+        path.add(root)
+
+        if (search == root.`val`)
+            return path
+
+        if (root.left != null) {
+            val left = getPath(root.left!!, search, path)
+            if (left.peek().`val` != search) {
+                left.pop()
+            }
         }
 
-        if (root.`val` == child)
-            return ancestors.apply {
-                plus(root)
+        if (root.right != null) {
+            val right = getPath(root.right!!, search, path)
+            if (right.peek().`val` != search) {
+                right.pop()
             }
-
-
-        val left = getAncestors(root.left, child, ancestors.plus(root))
-        if (left.isNotEmpty())
-            return left
-
-        val right = getAncestors(root.right, child, ancestors.plus(root))
-        if (right.isNotEmpty())
-            return right
-
-        return emptyList()
+        }
+        return path
     }
+}
 
+class TreeNode(var `val`: Int = 0) {
+    var left: TreeNode? = null
+    var right: TreeNode? = null
 }
 
 fun main() {
