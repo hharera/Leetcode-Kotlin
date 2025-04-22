@@ -1,28 +1,20 @@
 package com.harera.leetcode.leetcode274
 
+import java.lang.Integer.min
+
 class Solution {
     fun hIndex(citations: IntArray): Int {
         citations.sortDescending()
-        for (h in 1000 downTo  1) {
-            if(search(citations, h) >= h) {
+        for (h in min(1000, citations.size) downTo 1) {
+            if (search(citations, h)) {
                 return h
             }
         }
         return 0
     }
 
-    private fun search(citations: IntArray, h: Int): Int {
-        var start = 0
-        var end = citations.lastIndex
-        while (start <= end) {
-            val mid = (start + end) / 2
-            if (citations[mid] >= h) {
-                start = mid + 1
-            } else {
-                end = mid - 1
-            }
-        }
-        return start
+    private fun search(citations: IntArray, h: Int): Boolean {
+        return citations[h - 1] >= h
     }
 }
 
